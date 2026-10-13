@@ -1,0 +1,8 @@
+{
+  "name": "cozy-observatory",
+  "version": "0.1.0",
+  "private": true,
+  "description": "A cozy lavender productivity prototype with study timers, tasks, and observatory scenes.",
+  "scripts": { "start": "node server.js", "check": "node --check server.js && node --check public/app.js" },
+  "engines": { "node": ">=22" }
+}

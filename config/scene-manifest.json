@@ -1,0 +1,63 @@
+{
+  "project": "The Cozy Observatory",
+  "canvas": { "width": 1920, "height": 1080, "fps": 30 },
+  "browserService": "http://127.0.0.1:17777",
+  "safeScene": "Taking a Break",
+  "transition": { "type": "Fade", "durationMs": 420 },
+  "scenes": [
+    {
+      "name": "The Observatory",
+      "browserSource": "/observatory.html",
+      "camera": { "x": 90, "y": 120, "width": 1110, "height": 900, "backgroundRemoval": "preferred" },
+      "notes": "Primary scene. Camera remains visually dominant; widgets occupy the right rail."
+    },
+    {
+      "name": "The Common Room",
+      "browserSource": "/common-room.html",
+      "camera": { "x": 70, "y": 70, "width": 1280, "height": 940, "backgroundRemoval": "preferred" },
+      "notes": "Large camera with minimal interface for personal conversation."
+    },
+    {
+      "name": "The Reading Room",
+      "browserSource": "/reading-room.html",
+      "applicationCapture": { "x": 45, "y": 45, "width": 1410, "height": 885, "method": "single-window" },
+      "camera": { "x": 1495, "y": 80, "width": 380, "height": 300, "backgroundRemoval": "optional" },
+      "notes": "Use single-window capture, never unrestricted display capture, for privacy."
+    },
+    {
+      "name": "Stargazing",
+      "browserSource": "/stargazing.html",
+      "notes": "Starting Soon scene; uses the shared timer state as the visible countdown."
+    },
+    {
+      "name": "Taking a Break",
+      "browserSource": "/break.html",
+      "hotkey": "Ctrl+Shift+B",
+      "notes": "Immediate privacy scene. No camera or application capture sources."
+    },
+    {
+      "name": "Goodnight",
+      "browserSource": "/goodnight.html",
+      "notes": "Closing scene. No camera or application capture sources."
+    }
+  ],
+  "audioDefaults": {
+    "monitoring": "off",
+    "desktopAudio": "default-output-only",
+    "microphoneFilters": ["noise-suppression", "expander", "compressor", "limiter"],
+    "verifiedAgainstHardware": false
+  },
+  "streamingDefaults": {
+    "outputWidth": 1920,
+    "outputHeight": 1080,
+    "fps": 30,
+    "bitrateKbps": 6000,
+    "encoder": "hardware-if-available",
+    "verifiedAgainstHardware": false
+  },
+  "recordingDefaults": {
+    "format": "mkv",
+    "remuxToMp4": true,
+    "verifiedInStreamlabs": false
+  }
+}
