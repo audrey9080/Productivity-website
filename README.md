@@ -14,6 +14,16 @@ The complete browser-only website is in `docs/`. It has:
 
 Each visitor's work is saved in their own browser using local storage. It is not shared with other visitors or synced between devices. Clearing browser storage removes that work. Completed timers pause before the next session; there are no mandatory study targets.
 
+## Live Twitch overlays — free
+
+The study website includes a **Twitch connection** panel. Click **Connect overlay**, then copy the permanent widget URLs into Streamlabs or OBS browser sources. The clock, field notes, and optional scratchpad update live from the open website. No Supabase project or paid service is required.
+
+The overlay views share the site's stylesheet and automatically check for published asset changes every minute. Keep the website tab open during your stream. The free PeerJS signaling service connects the browser and the overlay; selected study fields then travel over WebRTC. This is live broadcasting, not cloud storage or cross-device study syncing. There is no camera or microphone access.
+
+Private tasks are never sent. Scratchpad sharing is off by default. Use the dedicated field-notes box for text you intend to show viewers. The pairing URL contains a read-only capability in its fragment; it is generated in your browser and never committed to this repository. Mutual HMAC challenges authenticate the paired controller and viewer. Read-only viewers cannot update the website. A stopped or disconnected overlay clears its content and reconnects when the controller returns.
+
+See [overlay setup and optional CSS snippets](docs/snippets/README.md). PeerJS is pinned to 1.5.5 with a SHA-384 integrity hash. Its upstream license is MIT; see [PeerJS source](https://github.com/peers/peerjs/tree/v1.5.5) and [free signaling documentation](https://peerjs.com/client/faq). Restricted networks can block direct WebRTC; connection status reports whether the live link is working.
+
 To host it on GitHub Pages:
 
 1. Open the repository's **Settings → Pages**.

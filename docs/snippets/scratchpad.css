@@ -1,0 +1,4 @@
+/* Optional Browser Source Custom CSS. Use the Scratchpad URL from the website. */
+html, body.overlay-page { background: transparent !important; margin: 0; overflow: hidden; }
+.overlay-notes { max-width: 424px; }
+#overlay-scratch-text { font-size: 16px; line-height: 29px; }

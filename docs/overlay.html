@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="referrer" content="no-referrer">
+  <title>Cozy Observatory · Live Twitch overlay</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="state.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/peerjs@1.5.5/dist/peerjs.min.js" integrity="sha384-x0YgkOr/3UOZP2CRDxGW9e0Q+2Qjyr3uJrm4xU32Y7ZCNAo7Cc7bjhrZMi/dwczu" crossorigin="anonymous" defer></script>
+  <script src="overlay-protocol.js" defer></script><script src="overlay.js" defer></script><script src="update-watch.js" defer></script>
+</head>
+<body class="overlay-page">
+  <main class="overlay-stack">
+    <section class="retro-window timer-window overlay-clock" id="overlay-clock" hidden>
+      <div class="title-bar"><span><span class="tiny-square" aria-hidden="true"></span> focus.clock</span><span aria-hidden="true">✦</span></div>
+      <div class="timer-content"><h1 class="section-label" id="overlay-mode">A MOMENT OF FOCUS</h1><div class="timer-ring" id="overlay-ring"><div><span id="overlay-time" role="timer">25:00</span><span id="overlay-caption">ready when you are</span></div></div><p class="sessions" id="overlay-sessions"></p></div>
+    </section>
+    <section class="retro-window notes-window overlay-notes" id="overlay-field-notes" hidden>
+      <div class="title-bar"><span><span class="tiny-square" aria-hidden="true"></span> field.notes</span><span aria-hidden="true">✧</span></div>
+      <div class="card-content"><div class="section-heading"><div><p class="section-label">WHAT WE'RE EXPLORING</p><h1 id="overlay-room">The Observatory</h1></div></div><div class="overlay-note-text" id="overlay-field-text"></div></div>
+    </section>
+    <section class="retro-window notes-window overlay-notes" id="overlay-scratchpad" hidden>
+      <div class="title-bar"><span><span class="tiny-square" aria-hidden="true"></span> scratchpad.notes</span><span aria-hidden="true">✧</span></div>
+      <div class="card-content"><div class="section-heading"><div><p class="section-label">ROOM FOR A THOUGHT</p><h1>A little scratchpad</h1></div></div><div class="overlay-note-text" id="overlay-scratch-text"></div></div>
+    </section>
+    <p class="overlay-connection-status" id="overlay-status" role="status">Open your website to connect the overlay.</p>
+  </main>
+</body>
+</html>

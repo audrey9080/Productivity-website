@@ -9,6 +9,10 @@
   <link rel="stylesheet" href="styles.css">
   <script src="state.js" defer></script>
   <script src="app.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/peerjs@1.5.5/dist/peerjs.min.js" integrity="sha384-x0YgkOr/3UOZP2CRDxGW9e0Q+2Qjyr3uJrm4xU32Y7ZCNAo7Cc7bjhrZMi/dwczu" crossorigin="anonymous" defer></script>
+  <script src="overlay-protocol.js" defer></script>
+  <script src="stream-sync.js" defer></script>
+  <script src="update-watch.js" defer></script>
 </head>
 <body data-room="observatory">
   <a class="skip-link" href="#workspace">Skip to your study space</a>
@@ -67,6 +71,22 @@
           <div class="card-content"><div class="section-heading"><div><p class="section-label">ROOM FOR A THOUGHT</p><h2 id="notes-heading">A little scratchpad</h2></div><span class="note-star" aria-hidden="true">✧</span></div><label class="sr-only" for="notes">Your study notes</label><textarea id="notes" maxlength="20000" placeholder="An idea, a question, something to come back to…"></textarea><p class="notes-status" id="notes-status">Saved as you write, in this browser.</p></div>
         </section>
       </div>
+      <section class="retro-window stream-window" aria-labelledby="stream-heading">
+        <div class="title-bar"><span><span class="tiny-square" aria-hidden="true"></span> twitch.connection</span><span class="window-controls" aria-hidden="true">― □ ×</span></div>
+        <div class="card-content">
+          <div class="section-heading"><div><p class="section-label">YOUR DESK, ON STREAM</p><h2 id="stream-heading">One website. A connected overlay.</h2></div><button type="button" class="primary-button stream-connect" id="stream-connect">Connect overlay</button></div>
+          <p class="stream-description">Connect once, then paste your widget links into Streamlabs or OBS. Keep this website open while streaming; your clock and chosen notes update live. Published design changes reach the overlay automatically.</p>
+          <p id="stream-status" class="stream-status" role="status">Overlay is off. Your scratchpad stays private.</p>
+          <div class="stream-options"><label><input id="stream-clock" type="checkbox" checked> Show focus clock</label><label><input id="stream-scratchpad" type="checkbox"> Show scratchpad on stream (first 2,000 characters)</label></div>
+          <label class="stream-field-label" for="stream-field-notes">Field notes for viewers</label><textarea id="stream-field-notes" maxlength="2000" placeholder="What are we exploring today? These notes appear on your field-notes overlay."></textarea>
+          <div class="stream-links" id="stream-links" hidden>
+            <div><strong>Focus clock</strong><span>360 × 360</span><button type="button" data-copy-widget="clock">Copy overlay URL</button><a id="clock-preview" target="_blank" rel="noopener noreferrer">Preview ↗</a></div>
+            <div><strong>Field notes</strong><span>440 × 360</span><button type="button" data-copy-widget="field-notes">Copy overlay URL</button><a id="field-notes-preview" target="_blank" rel="noopener noreferrer">Preview ↗</a></div>
+            <div><strong>Scratchpad</strong><span>440 × 360</span><button type="button" data-copy-widget="scratchpad">Copy overlay URL</button><a id="scratchpad-preview" target="_blank" rel="noopener noreferrer">Preview ↗</a></div>
+          </div>
+          <p class="stream-small">Free live sync. Links are read-only; keep them private. Personal task lists are never sent to the overlay.</p>
+        </div>
+      </section>
     </main>
     <footer class="site-footer"><span>Made for curious minds &amp; cozy afternoons.</span><span>Your tasks &amp; notes stay in this browser.</span><a href="https://github.com/audrey9080/Productivity-website">View the project <span aria-hidden="true">↗</span></a></footer>
   </div>

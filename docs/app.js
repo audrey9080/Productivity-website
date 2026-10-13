@@ -75,6 +75,7 @@
     if (document.activeElement !== get('notes')) get('notes').value = state.notes;
     renderTasks();
     get('local-clock').textContent = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    document.dispatchEvent(new CustomEvent('cozy-study-change'));
   }
   get('timer-toggle').addEventListener('click', () => commit('timer.toggle'));
   get('timer-reset').addEventListener('click', () => commit('timer.reset'));
@@ -105,6 +106,7 @@
     render();
   }
   document.addEventListener('visibilitychange', () => { if (!document.hidden) { readSaved(); tick(); } });
+  window.CozyStudySnapshot = () => structuredClone(state);
   readSaved(); tick();
   if (!storageAvailable) { get('notes-status').textContent = 'Saving unavailable — copy your notes before closing this tab.'; announce('Browser saving is unavailable. Keep this tab open to keep your work.'); }
   setInterval(tick, 500);

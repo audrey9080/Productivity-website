@@ -1,0 +1,6 @@
+/* Optional Browser Source Custom CSS. Use the Focus clock URL from the website. */
+/* The URL already loads the website's live CSS and JavaScript. */
+html, body.overlay-page { background: transparent !important; margin: 0; overflow: hidden; }
+.overlay-clock { max-width: 344px; }
+/* Optional: change only the panel's opacity, without fading its lettering. */
+/* .overlay-clock { background: rgba(221, 210, 242, 0.82); } */

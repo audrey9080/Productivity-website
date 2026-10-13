@@ -1,0 +1,4 @@
+/* Optional Browser Source Custom CSS. Use the Field notes URL from the website. */
+html, body.overlay-page { background: transparent !important; margin: 0; overflow: hidden; }
+.overlay-notes { max-width: 424px; }
+#overlay-field-text { font-size: 16px; line-height: 29px; }
