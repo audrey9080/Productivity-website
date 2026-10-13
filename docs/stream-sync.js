@@ -144,6 +144,11 @@
   updateLinks();
   if (!storageAvailable) status('Browser saving is unavailable. Keep this tab open during the stream.');
   // A saved pairing resumes when the website is reopened. A deliberate Stop lasts until Connect is pressed.
-  if (channel && resumeOnOpen) start();
+  const launcherRequested = location.hash === '#launch-stream';
+  if (launcherRequested) {
+    history.replaceState(null, '', `${location.pathname}${location.search}#stream-heading`);
+    get('stream-heading').scrollIntoView({ block: 'start' });
+  }
+  if (channel && resumeOnOpen || launcherRequested) start();
   window.addEventListener('beforeunload', () => { clearTimeout(retry); peer?.destroy(); releaseLock?.(); });
 })();
