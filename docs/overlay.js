@@ -50,7 +50,11 @@
     current.on('close', cleanup); current.on('error', cleanup);
   }
   function render() {
-    if (!latest || Date.now() - receivedAt > 20000) { blank(); if (latest) status('Connection paused. Reconnecting to your website…'); return; }
+    if (!latest) { blank(); return; }
+    if (Date.now() - receivedAt > 20000) {
+      latest = null; authenticated = false; blank(); status('Connection paused. Reconnecting to your website…');
+      const oldConnection = connection; connection = null; clearTimeout(handshakeTimeout); oldConnection?.close(); schedule(); return;
+    }
     document.body.dataset.room = latest.room;
     const showClock = !!latest.timer && (widget === 'clock' || widget === 'all');
     get('overlay-clock').hidden = !showClock;
