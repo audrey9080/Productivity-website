@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#d9c9ee">
+  <meta name="description" content="A cozy little observatory for studying, reading, and taking things at your own pace.">
+  <title>The Cozy Observatory · Your study space</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="state.js" defer></script>
+  <script src="app.js" defer></script>
+</head>
+<body data-room="observatory">
+  <a class="skip-link" href="#workspace">Skip to your study space</a>
+  <div class="site-shell">
+    <header class="site-header">
+      <a class="brand" href="./" aria-label="Cozy Observatory home"><span class="brand-star" aria-hidden="true">✦</span><span>cozy<br>observatory<span class="brand-dot">.</span></span></a>
+      <div class="header-right"><span class="online-dot" aria-hidden="true"></span><span>your little corner of the universe</span><time id="local-clock"></time></div>
+    </header>
+    <main id="workspace">
+      <section class="welcome" aria-labelledby="welcome-title">
+        <p class="eyebrow">A LITTLE SPACE TO THINK</p>
+        <h1 id="welcome-title">Make yourself <em>at home.</em></h1>
+        <p>Something to learn. Somewhere to begin. Take it at your own pace.</p>
+      </section>
+      <nav class="room-nav" aria-label="Choose your study room">
+        <button type="button" data-room-choice="observatory" aria-pressed="true"><span aria-hidden="true">✦</span> Observatory</button>
+        <button type="button" data-room-choice="reading" aria-pressed="false"><span aria-hidden="true">▤</span> Reading room</button>
+        <button type="button" data-room-choice="stargazing" aria-pressed="false"><span aria-hidden="true">☾</span> Stargazing</button>
+        <span class="room-nav-note">pick a view, settle in</span>
+      </nav>
+      <div class="study-grid">
+        <section class="retro-window view-window" aria-labelledby="room-title">
+          <div class="title-bar"><span><span class="tiny-square" aria-hidden="true"></span> <span id="room-file">observatory.view</span></span><span class="window-controls" aria-hidden="true">― □ ×</span></div>
+          <div class="landscape" role="img" aria-label="A pastel pixel-art observatory window overlooking lavender mountains, stars, and a crescent moon.">
+            <div class="scene-sky"></div><div class="scene-stars"></div><div class="scene-moon"></div>
+            <div class="mountain mountain-back"></div><div class="mountain mountain-front"></div>
+            <div class="window-frame frame-left"></div><div class="window-frame frame-right"></div><div class="window-frame frame-middle"></div><div class="window-frame frame-bottom"></div>
+            <div class="scene-desk"></div>
+            <div class="plant"><i></i><i></i><i></i><i></i><div></div></div>
+            <div class="books"><i></i><i></i><i></i></div><div class="mug"><span></span></div>
+            <div class="scene-caption"><span class="scene-badge">YOUR STUDY SANCTUARY</span><h2 id="room-title">The Observatory</h2><p id="room-description">A quiet desk. A sky full of possibilities.</p></div>
+          </div>
+          <div class="view-footer"><span><span class="sparkle" aria-hidden="true">✧</span> No rush. The stars will wait.</span><button type="button" id="focus-view" aria-pressed="false">Quiet view <span aria-hidden="true">↗</span></button></div>
+        </section>
+        <section class="retro-window timer-window" aria-labelledby="timer-heading">
+          <div class="title-bar"><span><span class="tiny-square" aria-hidden="true"></span> focus.clock</span><span class="window-controls" aria-hidden="true">― □ ×</span></div>
+          <div class="timer-content">
+            <h2 id="timer-heading" class="section-label">A MOMENT OF FOCUS</h2>
+            <div class="mode-switch" aria-label="Timer mode"><button type="button" data-mode="focus" aria-pressed="true">Focus</button><button type="button" data-mode="break" aria-pressed="false">Rest</button></div>
+            <div class="timer-ring" id="timer-ring"><div><span id="timer-display" role="timer" aria-live="off">25:00</span><span id="timer-caption">ready when you are</span></div></div>
+            <div class="timer-actions"><button class="primary-button" type="button" id="timer-toggle">▶ Start focusing</button><button class="icon-button" type="button" id="timer-reset" aria-label="Reset timer">↺</button></div>
+            <form id="timer-settings" class="timer-settings"><label>Focus <span><input id="focus-minutes" type="number" min="1" max="240" value="25" required> min</span></label><label>Rest <span><input id="break-minutes" type="number" min="1" max="240" value="5" required> min</span></label><button type="submit">Set</button></form>
+            <p class="sessions"><span aria-hidden="true">✦</span> <span id="session-count">0 focus sessions completed</span></p>
+          </div>
+        </section>
+        <section class="retro-window task-window" aria-labelledby="tasks-heading">
+          <div class="title-bar"><span><span class="tiny-square" aria-hidden="true"></span> little.quests</span><span class="window-controls" aria-hidden="true">― □ ×</span></div>
+          <div class="card-content"><div class="section-heading"><div><p class="section-label">ONE THING AT A TIME</p><h2 id="tasks-heading">Your little quests</h2></div><span class="count-badge" id="task-count">0 / 0</span></div>
+            <form id="task-form" class="task-form"><label class="sr-only" for="task-input">New task</label><input id="task-input" maxlength="200" placeholder="What would you like to work on?" required autocomplete="off"><button type="submit" aria-label="Add task">+</button></form>
+            <div class="task-filters" aria-label="Filter tasks"><button type="button" data-filter="all" aria-pressed="true">All</button><button type="button" data-filter="active" aria-pressed="false">In progress</button><button type="button" data-filter="done" aria-pressed="false">Done</button></div>
+            <ul id="task-list" class="task-list"></ul><p id="task-empty" class="empty-state">An open page, a fresh start.<br><span>Add a little quest above.</span></p>
+          </div>
+        </section>
+        <section class="retro-window notes-window" aria-labelledby="notes-heading">
+          <div class="title-bar"><span><span class="tiny-square" aria-hidden="true"></span> field.notes</span><span class="window-controls" aria-hidden="true">― □ ×</span></div>
+          <div class="card-content"><div class="section-heading"><div><p class="section-label">ROOM FOR A THOUGHT</p><h2 id="notes-heading">A little scratchpad</h2></div><span class="note-star" aria-hidden="true">✧</span></div><label class="sr-only" for="notes">Your study notes</label><textarea id="notes" maxlength="20000" placeholder="An idea, a question, something to come back to…"></textarea><p class="notes-status" id="notes-status">Saved as you write, in this browser.</p></div>
+        </section>
+      </div>
+    </main>
+    <footer class="site-footer"><span>Made for curious minds &amp; cozy afternoons.</span><span>Your tasks &amp; notes stay in this browser.</span><a href="https://github.com/audrey9080/Productivity-website">View the project <span aria-hidden="true">↗</span></a></footer>
+  </div>
+  <p id="announcement" class="toast" role="status" aria-live="polite"></p>
+  <noscript><p class="noscript">Turn on JavaScript to use the timer, tasks, and notes.</p></noscript>
+</body>
+</html>
