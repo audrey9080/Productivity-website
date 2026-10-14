@@ -3,7 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "description": "A cozy lavender productivity prototype with study timers, tasks, and observatory scenes.",
-  "scripts": { "start": "node server.js", "check": "node --check server.js && node --check public/app.js && node --check docs/state.js && node --check docs/app.js && node --check docs/overlay-protocol.js && node --check docs/stream-sync.js && node --check docs/overlay.js && node --check docs/update-watch.js && node --check docs/avatar.js", "test": "node --test tests/*.test.js" },
-  "engines": { "node": ">=22" }
+  "scripts": {
+    "start": "node server.js",
+    "check": "node --check server.js && node --check public/app.js && node --check docs/state.js && node --check docs/app.js && node --check docs/field-notes.js && node --check docs/calendar.js && node --check docs/overlay-protocol.js && node --check docs/stream-sync.js && node --check docs/overlay.js && node --check docs/update-watch.js && node --check docs/avatar.js",
+    "test": "node --test tests/*.test.js"
+  },
+  "engines": {
+    "node": ">=22"
+  }
 }
-

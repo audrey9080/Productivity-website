@@ -45,3 +45,18 @@ test('malformed saved state safely falls back and invalid entries are normalized
   const state = study.normalize({ version: 1, tasks: [null, { id: 'a', text: 'Read' }, { id: 'a', text: 'Duplicate' }], timer: { focusMinutes: 0, remainingSeconds: -10, running: true, endsAt: 'bad' }, room: 'missing' });
   assert.equal(state.tasks.length, 1); assert.equal(state.timer.focusMinutes, 25); assert.equal(state.timer.remainingSeconds, 0); assert.equal(state.timer.running, false); assert.equal(state.room, 'observatory');
 });
+
+test('tasks can be renamed and completed tasks can be cleared safely', () => {
+  const state = study.defaults();
+  study.act(state, 'task.add', { text: '  Read one chapter  ' });
+  study.act(state, 'task.add', { text: 'Keep this task' });
+  const [first, second] = state.tasks;
+  study.act(state, 'task.rename', { id: first.id, text: '  Read two chapters  ' });
+  assert.equal(state.tasks[0].text, 'Read two chapters');
+  study.act(state, 'task.rename', { id: second.id, text: '   ' });
+  assert.equal(state.tasks[1].text, 'Keep this task');
+  study.act(state, 'task.toggle', { id: first.id });
+  study.act(state, 'task.clearCompleted');
+  assert.deepEqual(state.tasks.map(task => task.text), ['Keep this task']);
+});
+
