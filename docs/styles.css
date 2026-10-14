@@ -27,3 +27,21 @@ body.overlay-page{background:transparent!important;background-image:none!importa
 .notes-status{display:flex;justify-content:space-between;gap:14px}
 #notes-count{white-space:nowrap}
 @media(max-width:430px){.task-filters{gap:10px;flex-wrap:wrap}#clear-completed{margin-left:0}.notes-status{align-items:flex-start;flex-direction:column;gap:5px}}
+
+
+/* Functional retro-window controls */
+.window-controls{display:inline-flex;align-items:center;gap:2px}
+.window-controls button{width:24px;height:21px;padding:0;display:grid;place-items:center;border:0;border-radius:3px;background:transparent;color:inherit;font:14px/1 var(--mono);cursor:pointer}
+.window-controls button:hover,.window-controls button:focus-visible{background:#fff8ff99;outline:1px solid #9d80b3}
+.retro-window.is-minimized{align-self:start!important}
+.retro-window.is-minimized>:not(.title-bar){display:none!important}
+.retro-window.is-minimized .title-bar{border-bottom:0}
+.retro-window.is-maximized{position:fixed!important;inset:18px!important;width:auto!important;height:auto!important;max-width:none!important;max-height:none!important;margin:0!important;z-index:1000;overflow:auto;box-shadow:0 16px 60px #4f3d6255,5px 6px 0 #a68cba}
+.retro-window.is-closed{display:none!important}
+body.has-maximized-window{overflow:hidden}
+body.has-maximized-window:after{content:"";position:fixed;inset:0;background:#5d4d7166;backdrop-filter:blur(3px);z-index:999}
+.window-restore-dock{position:fixed;right:18px;bottom:18px;z-index:1100;display:flex;flex-wrap:wrap;justify-content:flex-end;gap:7px;max-width:min(620px,calc(100vw - 36px));padding:9px;background:#e9ddf2e8;border:1px solid #ad95bf;border-radius:7px;box-shadow:3px 4px 0 #8f73a655;backdrop-filter:blur(8px)}
+.window-restore-dock[hidden]{display:none}
+.window-restore-dock button{padding:8px 11px;border:1px solid #af96c1;border-radius:4px;background:#fff8ff;color:#5f4a6d;font:10px var(--mono);cursor:pointer}
+.window-restore-dock button:hover,.window-restore-dock button:focus-visible{background:#d9c7e7;outline:2px solid #806293;outline-offset:1px}
+@media(max-width:700px){.retro-window.is-maximized{inset:8px!important}.window-restore-dock{right:8px;bottom:8px;max-width:calc(100vw - 16px)}}

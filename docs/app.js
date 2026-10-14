@@ -14,6 +14,109 @@
     reading: ['The Reading Room', 'A warm window. One more page to explore.', 'reading-room.view'],
     stargazing: ['Stargazing', 'A little stillness beneath the stars.', 'stargazing.view']
   };
+
+  const windowLayoutKey = 'cozy-observatory.windows.v1';
+  let windowLayout = {};
+  try { windowLayout = JSON.parse(localStorage.getItem(windowLayoutKey) || '{}'); } catch { windowLayout = {}; }
+
+  function saveWindowLayout() {
+    try { localStorage.setItem(windowLayoutKey, JSON.stringify(windowLayout)); } catch {}
+  }
+
+  function setupWindowControls() {
+    const windows = [...document.querySelectorAll('.retro-window')];
+    const restoreDock = document.createElement('aside');
+    restoreDock.className = 'window-restore-dock';
+    restoreDock.setAttribute('aria-label', 'Closed snippets');
+    restoreDock.hidden = true;
+    document.body.append(restoreDock);
+
+    const refreshDock = () => {
+      restoreDock.replaceChildren();
+      windows.forEach((panel, index) => {
+        if (!panel.classList.contains('is-closed')) return;
+        const title = panel.querySelector('.title-bar > span:first-child')?.textContent.trim() || `Snippet ${index + 1}`;
+        const restore = document.createElement('button');
+        restore.type = 'button';
+        restore.textContent = `Restore ${title}`;
+        restore.addEventListener('click', () => setWindowState(panel, index, 'normal'));
+        restoreDock.append(restore);
+      });
+      restoreDock.hidden = !restoreDock.children.length;
+    };
+
+    const setWindowState = (panel, index, nextState) => {
+      if (nextState === 'maximized') {
+        windows.forEach((other, otherIndex) => {
+          if (other !== panel && other.classList.contains('is-maximized')) {
+            other.classList.remove('is-maximized');
+            windowLayout[otherIndex] = 'normal';
+          }
+        });
+      }
+      panel.classList.toggle('is-minimized', nextState === 'minimized');
+      panel.classList.toggle('is-maximized', nextState === 'maximized');
+      panel.classList.toggle('is-closed', nextState === 'closed');
+      panel.dataset.windowState = nextState;
+      windowLayout[index] = nextState;
+      document.body.classList.toggle('has-maximized-window', windows.some(item => item.classList.contains('is-maximized')));
+      const minimize = panel.querySelector('[data-window-action="minimize"]');
+      const maximize = panel.querySelector('[data-window-action="maximize"]');
+      if (minimize) {
+        minimize.textContent = nextState === 'minimized' ? '▾' : '―';
+        minimize.title = nextState === 'minimized' ? 'Restore snippet' : 'Minimize snippet';
+        minimize.setAttribute('aria-label', minimize.title);
+      }
+      if (maximize) {
+        maximize.textContent = nextState === 'maximized' ? '❐' : '□';
+        maximize.title = nextState === 'maximized' ? 'Restore snippet' : 'Maximize snippet';
+        maximize.setAttribute('aria-label', maximize.title);
+      }
+      saveWindowLayout();
+      refreshDock();
+    };
+
+    windows.forEach((panel, index) => {
+      const controls = panel.querySelector('.window-controls');
+      if (!controls) return;
+      controls.removeAttribute('aria-hidden');
+      controls.replaceChildren();
+      [
+        ['minimize', '―', 'Minimize snippet'],
+        ['maximize', '□', 'Maximize snippet'],
+        ['close', '×', 'Close snippet']
+      ].forEach(([action, symbol, label]) => {
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.dataset.windowAction = action;
+        button.textContent = symbol;
+        button.title = label;
+        button.setAttribute('aria-label', label);
+        button.addEventListener('click', event => {
+          event.stopPropagation();
+          const current = panel.dataset.windowState || 'normal';
+          if (action === 'minimize') setWindowState(panel, index, current === 'minimized' ? 'normal' : 'minimized');
+          if (action === 'maximize') setWindowState(panel, index, current === 'maximized' ? 'normal' : 'maximized');
+          if (action === 'close') setWindowState(panel, index, 'closed');
+        });
+        controls.append(button);
+      });
+      const savedState = ['normal', 'minimized', 'maximized', 'closed'].includes(windowLayout[index]) ? windowLayout[index] : 'normal';
+      setWindowState(panel, index, savedState);
+      panel.querySelector('.title-bar')?.addEventListener('dblclick', event => {
+        if (event.target.closest('button')) return;
+        setWindowState(panel, index, panel.dataset.windowState === 'maximized' ? 'normal' : 'maximized');
+      });
+    });
+
+    document.addEventListener('keydown', event => {
+      if (event.key !== 'Escape') return;
+      const maximized = windows.find(panel => panel.classList.contains('is-maximized'));
+      if (maximized) setWindowState(maximized, windows.indexOf(maximized), 'normal');
+    });
+    refreshDock();
+  }
+
   function announce(message) {
     const element = get('announcement'); element.textContent = message; element.classList.add('visible');
     clearTimeout(toastTimeout); toastTimeout = setTimeout(() => element.classList.remove('visible'), 5000);
@@ -138,6 +241,7 @@
   }
   document.addEventListener('visibilitychange', () => { if (!document.hidden) { readSaved(); tick(); } });
   window.CozyStudySnapshot = () => structuredClone(state);
+  setupWindowControls();
   readSaved(); tick();
   if (!storageAvailable) { get('notes-status').textContent = 'Saving unavailable — copy your notes before closing this tab.'; announce('Browser saving is unavailable. Keep this tab open to keep your work.'); }
   setInterval(tick, 500);
