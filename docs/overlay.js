@@ -68,7 +68,7 @@
     }
     get('overlay-field-notes').hidden = !(widget === 'field-notes' || widget === 'all');
     get('overlay-room').textContent = { observatory: 'The Observatory', reading: 'The Reading Room', stargazing: 'Stargazing' }[latest.room];
-    get('overlay-field-text').textContent = latest.fieldNotes || 'A quiet desk. A sky full of possibilities.';
+    window.CozyFieldNotes.render(get('overlay-field-text'), latest.fieldNotes || 'A quiet desk. A sky full of possibilities.');
     get('overlay-scratchpad').hidden = latest.scratchpad === null || !(widget === 'scratchpad' || widget === 'all');
     get('overlay-scratch-text').textContent = latest.scratchpad || 'An idea, a question, something to come back to…';
   }

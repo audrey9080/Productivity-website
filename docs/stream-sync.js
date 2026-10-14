@@ -117,9 +117,26 @@
   get('stream-clock').checked = preferences.clock;
   get('stream-scratchpad').checked = preferences.scratchpad;
   get('stream-field-notes').value = preferences.fieldNotes;
+  function renderChecklist() {
+    window.CozyFieldNotes.render(get('field-checklist'), preferences.fieldNotes, (index, done) => {
+      get('stream-field-notes').value = window.CozyFieldNotes.toggle(preferences.fieldNotes, index, done);
+      get('stream-field-notes').dispatchEvent(new Event('input'));
+      get('field-checklist').querySelectorAll('input')[window.CozyFieldNotes.items(preferences.fieldNotes).findIndex(item => item.index === index)]?.focus();
+    });
+  }
+  renderChecklist();
+  get('field-check-form').addEventListener('submit', event => {
+    event.preventDefault();
+    const input = get('field-check-input'); const text = input.value.trim().replace(/[\r\n]+/g, ' ');
+    if (!text) return;
+    const next = preferences.fieldNotes + (preferences.fieldNotes && !preferences.fieldNotes.endsWith('\n') ? '\n' : '') + '- [ ] ' + text;
+    if (next.length > 2000) { get('field-check-status').textContent = 'Your field notes are full (2,000 characters). Shorten them before adding an item.'; return; }
+    get('stream-field-notes').value = next; get('stream-field-notes').dispatchEvent(new Event('input'));
+    input.value = ''; input.focus(); get('field-check-status').textContent = 'Checklist item added. Changes appear on your connected overlay.';
+  });
   ['stream-clock', 'stream-scratchpad', 'stream-field-notes'].forEach(id => get(id).addEventListener('input', () => {
     preferences.clock = get('stream-clock').checked; preferences.scratchpad = get('stream-scratchpad').checked; preferences.fieldNotes = get('stream-field-notes').value;
-    persist(); send(true);
+    renderChecklist(); persist(); send(true);
   }));
   document.addEventListener('cozy-study-change', () => send());
   window.addEventListener('storage', event => {
@@ -130,6 +147,7 @@
       preferences = { clock: saved.preferences?.clock !== false, scratchpad: saved.preferences?.scratchpad === true, fieldNotes: String(saved.preferences?.fieldNotes || '').slice(0, 2000) };
       get('stream-clock').checked = preferences.clock; get('stream-scratchpad').checked = preferences.scratchpad;
       if (document.activeElement !== get('stream-field-notes')) get('stream-field-notes').value = preferences.fieldNotes;
+      renderChecklist();
       if (saved.enabled === false && wanted) stop(false);
       else if (saved.enabled !== false && !wanted) start();
       send(true);

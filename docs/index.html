@@ -11,6 +11,7 @@
   <script src="app.js" defer></script>
   <script src="https://cdn.jsdelivr.net/npm/peerjs@1.5.5/dist/peerjs.min.js" integrity="sha384-x0YgkOr/3UOZP2CRDxGW9e0Q+2Qjyr3uJrm4xU32Y7ZCNAo7Cc7bjhrZMi/dwczu" crossorigin="anonymous" defer></script>
   <script src="overlay-protocol.js" defer></script>
+  <script src="field-notes.js" defer></script>
   <script src="stream-sync.js" defer></script>
   <script src="update-watch.js" defer></script>
 </head>
@@ -90,6 +91,9 @@
           <p id="stream-status" class="stream-status" role="status">Overlay is off. Your scratchpad stays private.</p>
           <div class="stream-options"><label><input id="stream-clock" type="checkbox" checked> Show focus clock</label><label><input id="stream-scratchpad" type="checkbox"> Show scratchpad on stream (first 2,000 characters)</label></div>
           <label class="stream-field-label" for="stream-field-notes">Field notes for viewers</label><textarea id="stream-field-notes" maxlength="2000" placeholder="What are we exploring today? These notes appear on your field-notes overlay."></textarea>
+          <form id="field-check-form" class="task-form"><label class="sr-only" for="field-check-input">New field-note checklist item</label><input id="field-check-input" maxlength="200" placeholder="Add a little checklist item…" required autocomplete="off"><button type="submit" aria-label="Add field-note checklist item">+</button></form>
+          <div id="field-checklist" class="field-checklist" aria-label="Field-note checklist"></div>
+          <p id="field-check-status" class="stream-small" role="status">Add items here, then check them off. Your original notes stay editable above.</p>
           <div class="stream-links" id="stream-links" hidden>
             <div><strong>Focus clock</strong><span>360 × 360</span><button type="button" data-copy-widget="clock">Copy overlay URL</button><a id="clock-preview" target="_blank" rel="noopener noreferrer">Preview ↗</a></div>
             <div><strong>Field notes</strong><span>440 × 360</span><button type="button" data-copy-widget="field-notes">Copy overlay URL</button><a id="field-notes-preview" target="_blank" rel="noopener noreferrer">Preview ↗</a></div>
