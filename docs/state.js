@@ -61,8 +61,14 @@
       if (text) state.tasks.push({ id: root.crypto.randomUUID(), text, done: false });
     } else if (action === 'task.toggle') {
       const task = state.tasks.find(item => item.id === payload.id); if (task) task.done = !task.done;
+    } else if (action === 'task.rename') {
+      const task = state.tasks.find(item => item.id === payload.id);
+      const text = String(payload.text || '').trim().slice(0, 200);
+      if (task && text) task.text = text;
     } else if (action === 'task.remove') {
       state.tasks = state.tasks.filter(item => item.id !== payload.id);
+    } else if (action === 'task.clearCompleted') {
+      state.tasks = state.tasks.filter(item => !item.done);
     } else if (action === 'notes') {
       state.notes = String(payload.text || '').slice(0, 20000);
     } else if (action === 'room' && rooms.includes(payload.room)) {

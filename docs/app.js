@@ -35,9 +35,9 @@
   function commit(action, payload = {}) {
     readSaved(); model.act(state, action, payload); save(); render();
   }
-  function renderTasks() {
+  function renderTasks(force = false) {
     const signature = JSON.stringify([state.tasks, filter]);
-    if (signature === taskSignature) return;
+    if (!force && signature === taskSignature) return;
     taskSignature = signature;
     const list = get('task-list'); list.replaceChildren();
     const visible = state.tasks.filter(task => filter === 'all' || (filter === 'done' ? task.done : !task.done));
@@ -48,11 +48,30 @@
       checkbox.addEventListener('change', () => commit('task.toggle', { id: task.id }));
       const text = document.createElement('span'); text.textContent = task.text;
       label.append(checkbox, text);
+      const actions = document.createElement('span'); actions.className = 'task-row-actions';
+      const edit = document.createElement('button'); edit.type = 'button'; edit.textContent = '✎'; edit.setAttribute('aria-label', `Edit task: ${task.text}`);
+      edit.addEventListener('click', () => {
+        const input = document.createElement('input'); input.className = 'task-edit'; input.value = task.text; input.maxLength = 200; input.setAttribute('aria-label', 'Edit task');
+        const finish = saveEdit => {
+          if (!input.isConnected) return;
+          const value = input.value.trim();
+          if (saveEdit && value) commit('task.rename', { id: task.id, text: value });
+          else renderTasks(true);
+        };
+        label.replaceWith(input); actions.hidden = true; input.focus(); input.select();
+        input.addEventListener('blur', () => finish(true), { once: true });
+        input.addEventListener('keydown', event => {
+          if (event.key === 'Enter') { event.preventDefault(); input.blur(); }
+          if (event.key === 'Escape') { event.preventDefault(); finish(false); }
+        });
+      });
       const remove = document.createElement('button'); remove.type = 'button'; remove.textContent = '×'; remove.setAttribute('aria-label', `Delete task: ${task.text}`);
       remove.addEventListener('click', () => commit('task.remove', { id: task.id }));
-      row.append(label, remove); list.append(row);
+      actions.append(edit, remove); row.append(label, actions); list.append(row);
     });
-    get('task-count').textContent = `${state.tasks.filter(task => task.done).length} / ${state.tasks.length}`;
+    const completed = state.tasks.filter(task => task.done).length;
+    get('task-count').textContent = `${completed} / ${state.tasks.length}`;
+    get('clear-completed').disabled = completed === 0;
     const empty = get('task-empty'); empty.hidden = visible.length > 0;
     if (state.tasks.length) empty.textContent = filter === 'done' ? 'Completed quests will appear here.' : 'No quests in this view. Take a breath.';
     else { empty.replaceChildren(document.createTextNode('An open page, a fresh start.'), document.createElement('br')); const hint = document.createElement('span'); hint.textContent = 'Add a little quest above.'; empty.append(hint); }
@@ -73,6 +92,7 @@
     document.querySelector('.landscape').setAttribute('aria-label', state.room === 'reading' ? 'A pastel pixel-art reading-room window overlooking warm mountains and a golden sun.' : state.room === 'stargazing' ? 'A pixel-art observatory window overlooking purple mountains beneath a starry night and crescent moon.' : 'A pastel pixel-art observatory window overlooking lavender mountains, stars, and a crescent moon.');
     document.querySelectorAll('[data-room-choice]').forEach(button => button.setAttribute('aria-pressed', String(button.dataset.roomChoice === state.room)));
     if (document.activeElement !== get('notes')) get('notes').value = state.notes;
+    get('notes-count').textContent = `${state.notes.length.toLocaleString()} / 20,000`;
     renderTasks();
     get('local-clock').textContent = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
     document.dispatchEvent(new CustomEvent('cozy-study-change'));
@@ -91,10 +111,21 @@
   document.querySelectorAll('[data-filter]').forEach(button => button.addEventListener('click', () => {
     filter = button.dataset.filter; document.querySelectorAll('[data-filter]').forEach(item => item.setAttribute('aria-pressed', String(item === button))); renderTasks();
   }));
+  get('clear-completed').addEventListener('click', () => {
+    const count = state.tasks.filter(task => task.done).length;
+    if (!count) return;
+    commit('task.clearCompleted'); announce(`${count} completed quest${count === 1 ? '' : 's'} cleared.`);
+  });
   get('notes').addEventListener('input', () => commit('notes', { text: get('notes').value }));
   document.querySelectorAll('[data-room-choice]').forEach(button => button.addEventListener('click', () => commit('room', { room: button.dataset.roomChoice })));
   get('focus-view').addEventListener('click', () => {
     const quiet = document.body.classList.toggle('quiet-view'); get('focus-view').setAttribute('aria-pressed', String(quiet)); get('focus-view').textContent = quiet ? 'Show workspace ↙' : 'Quiet view ↗';
+  });
+  document.addEventListener('keydown', event => {
+    const typing = ['INPUT', 'TEXTAREA'].includes(document.activeElement?.tagName);
+    if (event.altKey && event.code === 'Space' && !typing) { event.preventDefault(); commit('timer.toggle'); }
+    if (event.altKey && event.key.toLowerCase() === 'n' && !typing) { event.preventDefault(); get('task-input').focus(); }
+    if (event.altKey && event.key.toLowerCase() === 'q' && !typing) { event.preventDefault(); get('focus-view').click(); }
   });
   window.addEventListener('storage', event => {
     if (event.key !== model.KEY && event.key !== null) return;
