@@ -19,7 +19,13 @@
   <div class="site-shell">
     <header class="site-header">
       <a class="brand" href="./" aria-label="Cozy Observatory home"><span class="brand-star" aria-hidden="true">✦</span><span>cozy<br>observatory<span class="brand-dot">.</span></span></a>
-      <div class="header-right"><span class="online-dot" aria-hidden="true"></span><span>your little corner of the universe</span><time id="local-clock"></time></div>
+      <nav class="site-navigation" aria-label="Main navigation">
+        <a href="./">Home</a>
+        <details><summary>Rooms</summary><div class="nav-dropdown"><a href="?room=observatory">Observatory</a><a href="?room=reading">Reading room</a><a href="?room=stargazing">Stargazing</a></div></details>
+        <details><summary>Study tools</summary><div class="nav-dropdown"><a href="#timer-heading">Pomodoro clock</a><a href="#tasks-heading">Checklist</a><a href="#notes-heading">Notepad</a><a href="calendar.html">Calendar</a></div></details>
+        <details><summary>Streaming</summary><div class="nav-dropdown"><a href="#stream-heading">Overlay controls &amp; field notes</a><a href="avatar.html">Sav avatar studio</a><a href="snippets/README.md">Overlay setup guide</a></div></details>
+      </nav>
+      <div class="header-right"><time id="local-clock"></time></div>
     </header>
     <main id="workspace">
       <section class="welcome" aria-labelledby="welcome-title">
@@ -41,6 +47,11 @@
             <div class="mountain mountain-back"></div><div class="mountain mountain-front"></div>
             <div class="window-frame frame-left"></div><div class="window-frame frame-right"></div><div class="window-frame frame-middle"></div><div class="window-frame frame-bottom"></div>
             <div class="scene-desk"></div>
+            <div class="reading-shelf" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+            <div class="reading-lamp" aria-hidden="true"></div>
+            <div class="open-book" aria-hidden="true"></div>
+            <div class="telescope" aria-hidden="true"><i></i></div>
+            <div class="shooting-star" aria-hidden="true"></div>
             <div class="plant"><i></i><i></i><i></i><i></i><div></div></div>
             <div class="books"><i></i><i></i><i></i></div><div class="mug"><span></span></div>
             <div class="scene-caption"><span class="scene-badge">YOUR STUDY SANCTUARY</span><h2 id="room-title">The Observatory</h2><p id="room-description">A quiet desk. A sky full of possibilities.</p></div>

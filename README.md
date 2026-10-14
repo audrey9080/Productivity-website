@@ -1,5 +1,11 @@
 # Cozy Observatory
 
+## Personal calendar setup (prepared locally)
+
+Open `calendar.html` from **Study tools → Calendar**. In Google Calendar, go to Settings → your calendar → Integrate calendar and copy the Calendar ID or Google embed URL. Paste it into the website and save. Each visitor's ID and time zone remain in their own browser; do not commit personal calendar settings, credentials, or secret iCal links to this public repository.
+
+This displays Google's embedded calendar in Month, Week, or Agenda mode. Google enforces calendar access; private embeds depend on the viewer's Google session and permissions and may be blocked by browser cookie restrictions. Use **Open in Google Calendar** if the embed cannot access your calendar. This is not OAuth account linking or event editing. No calendar sharing permissions are changed. Integration prepared with Codex assistance.
+
 A comfy, cozy productivity website with translucent pastel lavender windows, a retro observatory scene, a study timer, personal tasks, and a scratchpad. Based on the local Cozy Observatory setup.
 
 ## GitHub Pages study website

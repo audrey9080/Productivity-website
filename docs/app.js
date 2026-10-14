@@ -11,8 +11,8 @@
   let toastTimeout;
   const roomInfo = {
     observatory: ['The Observatory', 'A quiet desk. A sky full of possibilities.', 'observatory.view'],
-    reading: ['The Reading Room', 'A warm window. One more page to explore.', 'reading-room.view'],
-    stargazing: ['Stargazing', 'A little stillness beneath the stars.', 'stargazing.view']
+    reading: ['The Reading Room', 'A lamplit nook. A book waiting to be opened.', 'reading-room.view'],
+    stargazing: ['Stargazing', 'An open sky. A telescope pointed toward possibility.', 'stargazing.view']
   };
 
   const windowLayoutKey = 'cozy-observatory.windows.v1';
@@ -192,7 +192,7 @@
     document.body.dataset.room = state.room;
     const [title, description, file] = roomInfo[state.room];
     get('room-title').textContent = title; get('room-description').textContent = description; get('room-file').textContent = file;
-    document.querySelector('.landscape').setAttribute('aria-label', state.room === 'reading' ? 'A pastel pixel-art reading-room window overlooking warm mountains and a golden sun.' : state.room === 'stargazing' ? 'A pixel-art observatory window overlooking purple mountains beneath a starry night and crescent moon.' : 'A pastel pixel-art observatory window overlooking lavender mountains, stars, and a crescent moon.');
+    document.querySelector('.landscape').setAttribute('aria-label', state.room === 'reading' ? 'A pastel pixel-art reading nook with a bookshelf, warm lamp, open book, and golden sunlight.' : state.room === 'stargazing' ? 'An outdoor pixel-art telescope beneath a starry purple sky, a shooting star, and crescent moon.' : 'A pastel pixel-art observatory window overlooking lavender mountains, stars, and a crescent moon.');
     document.querySelectorAll('[data-room-choice]').forEach(button => button.setAttribute('aria-pressed', String(button.dataset.roomChoice === state.room)));
     if (document.activeElement !== get('notes')) get('notes').value = state.notes;
     get('notes-count').textContent = `${state.notes.length.toLocaleString()} / 20,000`;
@@ -220,7 +220,35 @@
     commit('task.clearCompleted'); announce(`${count} completed quest${count === 1 ? '' : 's'} cleared.`);
   });
   get('notes').addEventListener('input', () => commit('notes', { text: get('notes').value }));
-  document.querySelectorAll('[data-room-choice]').forEach(button => button.addEventListener('click', () => commit('room', { room: button.dataset.roomChoice })));
+  function chooseRoom(room, push = true) {
+    if (!roomInfo[room]) return;
+    commit('room', { room });
+    if (push) { const url = new URL(location.href); url.searchParams.set('room', room); history.pushState({}, '', url); }
+  }
+  document.querySelectorAll('[data-room-choice]').forEach(button => button.addEventListener('click', () => chooseRoom(button.dataset.roomChoice)));
+  document.querySelectorAll('.site-navigation a[href^="?room="]').forEach(link => link.addEventListener('click', event => {
+    if (event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
+    event.preventDefault(); chooseRoom(new URL(link.href).searchParams.get('room')); link.closest('details').open = false;
+  }));
+  window.addEventListener('popstate', () => chooseRoom(new URL(location.href).searchParams.get('room') || 'observatory', false));
+  const menus = [...document.querySelectorAll('.site-navigation details')];
+  menus.forEach(menu => menu.addEventListener('toggle', () => { if (menu.open) menus.forEach(other => { if (other !== menu) other.open = false; }); }));
+  document.addEventListener('click', event => { if (!event.target.closest('.site-navigation')) menus.forEach(menu => { menu.open = false; }); });
+  document.addEventListener('keydown', event => { if (event.key === 'Escape') menus.forEach(menu => { if (menu.open) { menu.open = false; menu.querySelector('summary').focus(); } }); });
+  document.querySelectorAll('.site-navigation a[href^="#"]').forEach(link => link.addEventListener('click', () => {
+    const target = document.querySelector(link.getAttribute('href'));
+    const panel = target?.closest('.retro-window');
+    if (panel?.classList.contains('is-closed')) {
+      const index = [...document.querySelectorAll('.retro-window')].indexOf(panel);
+      const dockButton = [...document.querySelectorAll('.window-restore-dock button')].find(button => button.textContent.includes(panel.querySelector('.title-bar > span:first-child').textContent.trim()));
+      if (dockButton) dockButton.click();
+      windowLayout[index] = 'normal'; saveWindowLayout();
+    }
+    if (panel?.classList.contains('is-minimized')) panel.querySelector('[data-window-action="minimize"]')?.click();
+    document.body.classList.remove('quiet-view');
+    get('focus-view').setAttribute('aria-pressed', 'false'); get('focus-view').textContent = 'Quiet view ↗';
+    link.closest('details').open = false;
+  }));
   get('focus-view').addEventListener('click', () => {
     const quiet = document.body.classList.toggle('quiet-view'); get('focus-view').setAttribute('aria-pressed', String(quiet)); get('focus-view').textContent = quiet ? 'Show workspace ↙' : 'Quiet view ↗';
   });
@@ -242,7 +270,10 @@
   document.addEventListener('visibilitychange', () => { if (!document.hidden) { readSaved(); tick(); } });
   window.CozyStudySnapshot = () => structuredClone(state);
   setupWindowControls();
-  readSaved(); tick();
+  readSaved();
+  const requestedRoom = new URL(location.href).searchParams.get('room');
+  if (roomInfo[requestedRoom]) { model.act(state, 'room', { room: requestedRoom }); save(); }
+  tick();
   if (!storageAvailable) { get('notes-status').textContent = 'Saving unavailable — copy your notes before closing this tab.'; announce('Browser saving is unavailable. Keep this tab open to keep your work.'); }
   setInterval(tick, 500);
 })();
