@@ -35,7 +35,7 @@ All asset links are relative, so this works under the repository's project URL. 
 
 ## Sav stream avatar
 
-Choose **Open avatar studio** in the new Sav panel, or expand **Try Sav here** to use it inside the study website.
+Choose **Open avatar studio** in the new Sav panel to open a separate tab and keep your existing clock/notes connection active, or expand **Try Sav here** to use it inside the study website.
 
 1. Open the studio in Chrome or Edge on HTTPS or localhost.
 2. Click **Start webcam tracking**, allow access, look forward, and click **Center my pose**.
@@ -95,6 +95,7 @@ Possible next steps include cloud-synced user workspaces, authenticated communit
 ## Provenance
 
 The starter and this import were developed with AI assistance through Codex. The lavender styling is included from the local setup. This repository has not been deployed as a public website.
+
 
 
 
