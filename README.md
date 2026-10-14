@@ -43,7 +43,7 @@ Choose **Open avatar studio** in the new Sav panel to open a separate tab and ke
 4. Choose green screen and click **Enter stream view**. In Streamlabs/OBS, capture that browser window and add a green Chroma Key filter. Crop the toolbar and keep the window visible and unminimized. Escape restores the controls.
 5. Stop the camera before opening another studio tab. Use your normal Streamlabs microphone source for stream audio.
 
-Sav is a vector chibi prototype with head movement, blinking, jaw, smile and eyebrow animation; shoulder sway follows the head. No hand or full-body tracking. This is not an importable Live2D/VTube Studio model.
+Sav uses a generated 2-by-2 transparent pixel-art sprite atlas in a detailed 32-bit-era style. Her anatomical left side is lavender purple and her right side is pastel blue. Four states combine open/closed eyes with open/closed talking mouth. Canvas playback keeps pixels crisp, normalizes each frame to avoid position jumps, and adds gentle breathing and speech bounce. Webcam head tilt/position moves the whole portrait; there is no separate head-turn, individual-eye, smile, eyebrow, hand or full-body rig. This is not an importable Live2D/VTube Studio model.
 
 Only the avatar studio requests camera/microphone access, after you click its controls. Camera frames and microphone samples are processed locally and are not sent through the clock/notes overlay connection. MediaPipe Tasks Vision 0.10.22-rc.20250304 and Google's face model download on demand from jsDelivr and Google Storage, so tracking needs internet and browser permissions.
 
