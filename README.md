@@ -18,7 +18,7 @@ Each visitor's work is saved in their own browser using local storage. It is not
 
 The study website includes a **Twitch connection** panel. Click **Connect overlay**, then copy the permanent widget URLs into Streamlabs or OBS browser sources. The clock, field notes, and optional scratchpad update live from the open website. No Supabase project or paid service is required.
 
-The overlay views share the site's stylesheet and automatically check for published asset changes every minute. Keep the website tab open during your stream. The free PeerJS signaling service connects the browser and the overlay; selected study fields then travel over WebRTC. This is live broadcasting, not cloud storage or cross-device study syncing. There is no camera or microphone access.
+The overlay views share the site's stylesheet and automatically check for published asset changes every minute. Keep the website tab open during your stream. The free PeerJS signaling service connects the browser and the overlay; selected study fields then travel over WebRTC. This is live broadcasting, not cloud storage or cross-device study syncing. The clock and notes overlay does not access your camera or microphone. The optional Sav avatar studio requests access only after you click its start controls.
 
 Private tasks are never sent. Scratchpad sharing is off by default. Use the dedicated field-notes box for text you intend to show viewers. The pairing URL contains a read-only capability in its fragment; it is generated in your browser and never committed to this repository. Mutual HMAC challenges authenticate the paired controller and viewer. Read-only viewers cannot update the website. A stopped or disconnected overlay clears its content and reconnects when the controller returns.
 
@@ -32,6 +32,24 @@ To host it on GitHub Pages:
 4. After the deployment finishes, use `https://audrey9080.github.io/Productivity-website/`.
 
 All asset links are relative, so this works under the repository's project URL. `docs/index.html`, `docs/styles.css`, `docs/state.js`, and `docs/app.js` are the public website. No Node backend or build process is needed for GitHub Pages. Pages activation and publication are separate from adding these files.
+
+## Sav stream avatar
+
+Choose **Open avatar studio** in the new Sav panel, or expand **Try Sav here** to use it inside the study website.
+
+1. Open the studio in Chrome or Edge on HTTPS or localhost.
+2. Click **Start webcam tracking**, allow access, look forward, and click **Center my pose**.
+3. Optionally enable **Use microphone for mouth** for speech-driven animation.
+4. Choose green screen and click **Enter stream view**. In Streamlabs/OBS, capture that browser window and add a green Chroma Key filter. Crop the toolbar and keep the window visible and unminimized. Escape restores the controls.
+5. Stop the camera before opening another studio tab. Use your normal Streamlabs microphone source for stream audio.
+
+Sav is a vector chibi prototype with head movement, blinking, jaw, smile and eyebrow animation; shoulder sway follows the head. No hand or full-body tracking. This is not an importable Live2D/VTube Studio model.
+
+Only the avatar studio requests camera/microphone access, after you click its controls. Camera frames and microphone samples are processed locally and are not sent through the clock/notes overlay connection. MediaPipe Tasks Vision 0.10.22-rc.20250304 and Google's face model download on demand from jsDelivr and Google Storage, so tracking needs internet and browser permissions.
+
+Preview, controls and microphone lifecycle were checked in a browser. Real camera/model inference remains unverified because the development environment blocked external model downloads. Microphone mouth and the talking demo remain available if model loading fails.
+
+Reference: [Google Face Landmarker web guide](https://developers.google.com/edge/mediapipe/solutions/vision/face_landmarker/web_js). Sav is an original Star Trek fan character. Artwork and integration developed with Codex assistance.
 
 ## Original Streamlabs prototype
 
@@ -77,3 +95,6 @@ Possible next steps include cloud-synced user workspaces, authenticated communit
 ## Provenance
 
 The starter and this import were developed with AI assistance through Codex. The lavender styling is included from the local setup. This repository has not been deployed as a public website.
+
+
+
